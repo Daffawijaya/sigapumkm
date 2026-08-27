@@ -1,18 +1,50 @@
 "use client";
 import { useActionState, useState } from "react";
 import { addMonitoringAction } from "@/app/(app)/umkm/[id]/monitoring/tambah/actions";
+
 const field =
   "mt-2 w-full rounded-md border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100";
-const toggles = [
-  ["memiliki_nib", "NIB"],
-  ["memiliki_halal", "Halal"],
-  ["memiliki_pirt", "PIRT"],
-  ["memiliki_haki", "HAKI"],
-  ["memiliki_whatsapp_business", "WhatsApp Business"],
-  ["memiliki_instagram", "Instagram"],
-  ["memiliki_facebook", "Facebook"],
-  ["memiliki_tiktok", "TikTok"],
-];
+
+function ToggleField({
+  name,
+  label,
+  detail,
+  defaultChecked,
+  defaultValue,
+}: {
+  name: string;
+  label: string;
+  detail: string;
+  defaultChecked?: boolean;
+  defaultValue?: string;
+}) {
+  const [yes, setYes] = useState(defaultChecked ?? false);
+  return (
+    <div className="rounded-md border border-slate-200 p-4">
+      <div className="flex items-center justify-between">
+        <label className="text-sm font-medium">{label}</label>
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            name={name}
+            type="checkbox"
+            checked={yes}
+            onChange={(e) => setYes(e.target.checked)}
+          />{" "}
+          Ya
+        </label>
+      </div>
+      {yes && (
+        <input
+          name={detail}
+          defaultValue={defaultValue ?? ""}
+          placeholder={`Nomor/akun ${label}`}
+          className={field}
+        />
+      )}
+    </div>
+  );
+}
+
 export function MonitoringForm({
   umkmId,
   defaults,
@@ -69,40 +101,70 @@ export function MonitoringForm({
         </div>
       </section>
       <section className="rounded-lg bg-white p-6">
-        <h2 className="font-semibold">2–3. Legalitas & digitalisasi</h2>
-        <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          {toggles.map(([name, label]) => (
-            <label
-              key={name}
-              className="flex items-center justify-between rounded-md border border-slate-200 p-4 text-sm font-medium"
-            >
-              {label}
-              <input
-                name={name}
-                type="checkbox"
-                defaultChecked={Boolean(defaults[name])}
-              />
-            </label>
-          ))}
-        </div>
-        {[
-          ["nomor_nib", "Nomor NIB"],
-          ["nomor_halal", "Nomor Halal"],
-          ["nomor_pirt", "Nomor PIRT"],
-          ["nomor_haki", "Nomor HAKI"],
-          ["whatsapp_business", "WhatsApp Business"],
-          ["instagram", "Instagram"],
-          ["facebook", "Facebook"],
-          ["tiktok", "TikTok"],
-        ].map(([name, label]) => (
-          <input
-            key={name}
-            name={name}
-            defaultValue={String(defaults[name] ?? "")}
-            placeholder={label}
-            className={`${field} md:w-[calc(50%-6px)] md:mr-3`}
+        <h2 className="font-semibold">2. Legalitas</h2>
+        <div className="mt-5 space-y-4">
+          <ToggleField
+            name="memiliki_nib"
+            detail="nomor_nib"
+            label="NIB"
+            defaultChecked={Boolean(defaults.memiliki_nib)}
+            defaultValue={String(defaults.nomor_nib ?? "")}
           />
-        ))}
+          <ToggleField
+            name="memiliki_halal"
+            detail="nomor_halal"
+            label="Halal"
+            defaultChecked={Boolean(defaults.memiliki_halal)}
+            defaultValue={String(defaults.nomor_halal ?? "")}
+          />
+          <ToggleField
+            name="memiliki_pirt"
+            detail="nomor_pirt"
+            label="PIRT"
+            defaultChecked={Boolean(defaults.memiliki_pirt)}
+            defaultValue={String(defaults.nomor_pirt ?? "")}
+          />
+          <ToggleField
+            name="memiliki_haki"
+            detail="nomor_haki"
+            label="HAKI"
+            defaultChecked={Boolean(defaults.memiliki_haki)}
+            defaultValue={String(defaults.nomor_haki ?? "")}
+          />
+        </div>
+      </section>
+      <section className="rounded-lg bg-white p-6">
+        <h2 className="font-semibold">3. Digitalisasi</h2>
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          <ToggleField
+            name="memiliki_whatsapp_business"
+            detail="whatsapp_business"
+            label="WhatsApp Business"
+            defaultChecked={Boolean(defaults.memiliki_whatsapp_business)}
+            defaultValue={String(defaults.whatsapp_business ?? "")}
+          />
+          <ToggleField
+            name="memiliki_instagram"
+            detail="instagram"
+            label="Instagram"
+            defaultChecked={Boolean(defaults.memiliki_instagram)}
+            defaultValue={String(defaults.instagram ?? "")}
+          />
+          <ToggleField
+            name="memiliki_facebook"
+            detail="facebook"
+            label="Facebook"
+            defaultChecked={Boolean(defaults.memiliki_facebook)}
+            defaultValue={String(defaults.facebook ?? "")}
+          />
+          <ToggleField
+            name="memiliki_tiktok"
+            detail="tiktok"
+            label="TikTok"
+            defaultChecked={Boolean(defaults.memiliki_tiktok)}
+            defaultValue={String(defaults.tiktok ?? "")}
+          />
+        </div>
       </section>
       <section className="rounded-lg bg-white p-6">
         <h2 className="font-semibold">4. Kondisi & tindak lanjut</h2>
