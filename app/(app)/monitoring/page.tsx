@@ -112,8 +112,8 @@ export default async function MonitoringPage({
           </Link>
         )}
       </form>
-      <div className="mt-5 overflow-x-auto rounded-lg border border-slate-200 bg-white">
-        <table className="w-full min-w-[1500px] text-left text-sm">
+      <div className="mt-5 rounded-lg border border-slate-200 bg-white">
+        <table className="w-full text-left text-sm">
           <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
             <tr>
               {[
