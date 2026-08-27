@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { formatOrang, formatRupiah, formatTanggal } from "@/lib/format";
 import { growthStatus, percentChange } from "@/lib/comparison";
+import { SnapshotComparison, type MonitoringSnapshot } from "@/components/umkm/snapshot-comparison";
 
 export default async function DetailUmkmPage({
   params,
@@ -29,12 +30,23 @@ export default async function DetailUmkmPage({
   const monitorings = rawMonitorings ?? [];
   const kbli = rawKbli ?? [];
   const latest = monitorings[0];
+  const previous = monitorings[1];
   const baseline = { ...u };
   const current = latest ? latest : undefined;
   const status = growthStatus(baseline, current);
   const change = latest
     ? percentChange(Number(latest.omzet), Number(u.omzet))
     : null;
+  const toSnapshot = (row: Record<string, unknown>, label: string): MonitoringSnapshot => ({
+    label,
+    omzet: Number(row.omzet ?? 0),
+    tenagaKerja: Number(row.jumlah_tenaga_kerja ?? 0),
+    legalitas: [row.memiliki_nib, row.memiliki_halal, row.memiliki_pirt, row.memiliki_haki].filter(Boolean).length,
+    digitalisasi: [row.memiliki_whatsapp_business, row.memiliki_instagram, row.memiliki_facebook, row.memiliki_tiktok].filter(Boolean).length,
+  });
+  const baselineSnapshot = toSnapshot(u, "Baseline");
+  const latestSnapshot = latest ? toSnapshot(latest, `Monitoring ${latest.monitoring_ke}`) : undefined;
+  const previousSnapshot = previous ? toSnapshot(previous, `Monitoring ${previous.monitoring_ke}`) : baselineSnapshot;
   return (
     <main className="mx-auto max-w-[1280px] p-5 md:p-8">
       <p className="text-sm text-slate-500">
@@ -100,6 +112,7 @@ export default async function DetailUmkmPage({
           </article>
         ))}
       </div>
+      <SnapshotComparison baseline={baselineSnapshot} latest={latestSnapshot} previous={previousSnapshot} />
       <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_.8fr]">
         <section className="rounded-lg border border-slate-200 bg-white p-6">
           <h2 className="font-semibold">Data usaha & peserta</h2>
