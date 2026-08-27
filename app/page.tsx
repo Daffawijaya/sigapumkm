@@ -1,175 +1,228 @@
-const stats = [
-  {
-    label: "Total UMKM",
-    value: "—",
-    note: "Data aktif",
-    color: "bg-emerald-500",
-  },
-  {
-    label: "Total omzet",
-    value: "Rp —",
-    note: "Kondisi terkini",
-    color: "bg-blue-500",
-  },
-  {
-    label: "Sudah dimonitor",
-    value: "—",
-    note: "Cakupan monitoring",
-    color: "bg-amber-500",
-  },
-  {
-    label: "Perlu perhatian",
-    value: "—",
-    note: "Butuh tindak lanjut",
-    color: "bg-rose-500",
-  },
-];
+import Link from "next/link";
+import {
+  Building2,
+  ClipboardCheck,
+  TrendingUp,
+  Shield,
+  Smartphone,
+  ArrowRight,
+} from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
+import { formatRupiah } from "@/lib/format";
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient();
+  let totalUmkm = 0;
+  let totalOmzet = 0;
+  let monitored = 0;
+  let kecamatanCount = 0;
+
+  if (supabase) {
+    const [{ count }, { data: omzetRows }, { count: monCount }, { data: kec }] =
+      await Promise.all([
+        supabase.from("umkm_current").select("*", { count: "exact", head: true }),
+        supabase.from("umkm_current").select("current_omzet"),
+        supabase
+          .from("umkm_current")
+          .select("*", { count: "exact", head: true })
+          .not("latest_monitoring_id", "is", null),
+        supabase.from("kecamatan").select("id"),
+      ]);
+    totalUmkm = count ?? 0;
+    totalOmzet = (omzetRows ?? []).reduce(
+      (s, r) => s + Number(r.current_omzet ?? 0),
+      0,
+    );
+    monitored = monCount ?? 0;
+    kecamatanCount = (kec ?? []).length;
+  }
+
+  const coverage =
+    totalUmkm > 0 ? Math.round((monitored / totalUmkm) * 100) : 0;
+
   return (
     <main className="min-h-screen bg-[#f5f7f6] text-slate-900">
-      <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col bg-[#103b33] px-5 py-6 text-white lg:flex">
-        <div className="flex items-center gap-3 border-b border-white/10 pb-6">
-          <div className="grid h-10 w-10 place-items-center rounded-lg bg-lime-200 font-bold text-[#103b33]">
+      <nav className="flex items-center justify-between px-6 py-5 md:px-12">
+        <div className="flex items-center gap-3">
+          <div className="grid h-9 w-9 place-items-center rounded-lg bg-[#103b33] font-bold text-lime-200">
             S
           </div>
-          <div>
-            <p className="font-semibold tracking-tight">SIGAPUMKM</p>
-            <p className="text-xs text-emerald-100/60">Kutai Kartanegara</p>
-          </div>
+          <span className="text-lg font-semibold tracking-tight">
+            SIGAPUMKM
+          </span>
         </div>
-        <nav className="mt-7 space-y-1" aria-label="Navigasi utama">
-          {["Dashboard", "Data UMKM", "Monitoring"].map((item, index) => (
-            <a
-              key={item}
-              href="#"
-              className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-sm ${index === 0 ? "bg-white/10 font-medium" : "text-emerald-50/70 hover:bg-white/5"}`}
-            >
-              <span className="h-2 w-2 rounded-full bg-current" />
-              {item}
-            </a>
-          ))}
-        </nav>
-        <div className="mt-auto rounded-lg border border-white/10 bg-white/5 p-4">
-          <p className="text-sm font-medium">Administrator</p>
-          <p className="mt-1 text-xs text-emerald-100/60">
-            Akses seluruh kecamatan
-          </p>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/login"
+            className="rounded-md px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900"
+          >
+            Masuk
+          </Link>
+          <Link
+            href="/login"
+            className="rounded-md bg-[#176b57] px-4 py-2 text-sm font-medium text-white"
+          >
+            Dashboard
+          </Link>
         </div>
-      </aside>
+      </nav>
 
-      <section className="lg:ml-64">
-        <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-slate-200 bg-white/95 px-5 backdrop-blur md:px-8">
-          <div>
-            <p className="text-xs text-slate-500">Sistem Informasi UMKM</p>
-            <p className="text-sm font-semibold">Monitoring Terpadu</p>
-          </div>
-          <button className="rounded-md bg-[#176b57] px-4 py-2 text-sm font-medium text-white shadow-sm">
-            + Tambah Data UMKM
-          </button>
-        </header>
-
-        <div className="mx-auto max-w-[1440px] p-5 md:p-8">
-          <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-            <div>
-              <p className="text-sm font-medium text-[#176b57]">
-                Ringkasan wilayah
-              </p>
-              <h1 className="mt-1 text-2xl font-semibold tracking-tight md:text-3xl">
-                Dashboard SIGAPUMKM
-              </h1>
-              <p className="mt-2 max-w-2xl text-sm text-slate-500">
-                Pantau pertumbuhan usaha, legalitas, digitalisasi, dan kebutuhan
-                tindak lanjut UMKM Tenggarong Seberang dan Anggana.
-              </p>
-            </div>
-            <p className="text-xs text-slate-400">
-              Data diperbarui setelah sinkronisasi
-            </p>
-          </div>
-
-          <div className="mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            {stats.map((stat) => (
-              <article
-                key={stat.label}
-                className="rounded-lg bg-white p-5"
-              >
-                <div className={`mb-4 h-1 w-9 rounded-full ${stat.color}`} />
-                <p className="text-sm text-slate-500">{stat.label}</p>
-                <p className="mt-2 text-2xl font-semibold tracking-tight">
-                  {stat.value}
-                </p>
-                <p className="mt-2 text-xs text-slate-400">{stat.note}</p>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-5 grid gap-5 xl:grid-cols-[minmax(0,1.7fr)_minmax(280px,.7fr)]">
-            <article className="rounded-lg bg-white p-5">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h2 className="font-semibold">Tren omzet UMKM</h2>
-                  <p className="mt-1 text-xs text-slate-500">
-                    Rata-rata kondisi terbaru per bulan
-                  </p>
-                </div>
-                <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
-                  Data aktual
-                </span>
-              </div>
-              <div className="mt-8 grid h-60 place-items-center rounded-md border border-dashed border-slate-200 bg-slate-50/70 text-center">
-                <div>
-                  <p className="text-sm font-medium text-slate-600">
-                    Grafik siap menampilkan data
-                  </p>
-                  <p className="mt-1 text-xs text-slate-400">
-                    Hubungkan Supabase untuk melihat tren aktual
-                  </p>
-                </div>
-              </div>
-            </article>
-            <article className="rounded-lg bg-[#173f37] p-5 text-white">
-              <p className="text-sm font-medium text-emerald-100">
-                Cakupan monitoring
-              </p>
-              <div className="mx-auto my-7 grid h-36 w-36 place-items-center rounded-full border-[12px] border-white/10 border-t-lime-300">
-                <div className="text-center">
-                  <p className="text-3xl font-semibold">—%</p>
-                  <p className="text-[11px] text-emerald-100/60">terpantau</p>
-                </div>
-              </div>
-              <p className="text-center text-xs leading-5 text-emerald-100/70">
-                Monitoring berkala membantu mengidentifikasi UMKM yang
-                berkembang dan memerlukan perhatian.
-              </p>
-            </article>
-          </div>
-
-          <article className="mt-5 overflow-hidden rounded-lg bg-white">
-            <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-              <div>
-                <h2 className="font-semibold">UMKM perlu perhatian</h2>
-                <p className="mt-1 text-xs text-slate-500">
-                  Prioritas tindak lanjut berdasarkan indikator objektif
-                </p>
-              </div>
-              <button className="text-sm font-medium text-[#176b57]">
-                Lihat semua
-              </button>
-            </div>
-            <div className="grid min-h-32 place-items-center p-6 text-center">
-              <div>
-                <p className="text-sm font-medium text-slate-600">
-                  Belum ada data untuk ditampilkan
-                </p>
-                <p className="mt-1 text-xs text-slate-400">
-                  Data akan muncul setelah UMKM dan monitoring tersimpan.
-                </p>
-              </div>
-            </div>
-          </article>
+      <section className="mx-auto max-w-5xl px-6 pt-20 pb-24 text-center md:pt-32 md:pb-36">
+        <p className="text-sm font-medium text-[#176b57]">
+          Sistem Informasi UMKM
+        </p>
+        <h1 className="mt-4 text-4xl font-semibold tracking-tight md:text-6xl md:leading-tight">
+          Pantau perkembangan
+          <br />
+          UMKM secara <span className="text-[#176b57]">utuh</span>
+        </h1>
+        <p className="mx-auto mt-6 max-w-xl text-base text-slate-500 md:text-lg">
+          Dari baseline hingga tindak lanjut — satu ruang kerja untuk
+          mendata, memonitor, dan melihat pertumbuhan UMKM di Tenggarong
+          Seberang dan Anggana.
+        </p>
+        <div className="mt-8 flex items-center justify-center gap-3">
+          <Link
+            href="/login"
+            className="rounded-md bg-[#176b57] px-6 py-3 text-sm font-medium text-white"
+          >
+            Mulai Sekarang
+          </Link>
+          <a
+            href="#fitur"
+            className="rounded-md border border-slate-300 bg-white px-6 py-3 text-sm font-medium text-slate-700"
+          >
+            Pelajari Lebih Lanjut
+          </a>
         </div>
       </section>
+
+      <section className="mx-auto max-w-5xl px-6">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            {
+              label: "Total UMKM",
+              value: totalUmkm.toLocaleString("id-ID"),
+              icon: Building2,
+              color: "bg-emerald-50 text-emerald-700",
+            },
+            {
+              label: "Omzet Terkini",
+              value: formatRupiah(totalOmzet),
+              icon: TrendingUp,
+              color: "bg-blue-50 text-blue-700",
+            },
+            {
+              label: "Sudah Dimonitor",
+              value: `${monitored} / ${totalUmkm}`,
+              icon: ClipboardCheck,
+              color: "bg-amber-50 text-amber-700",
+            },
+            {
+              label: "Kecamatan",
+              value: String(kecamatanCount),
+              icon: Building2,
+              color: "bg-rose-50 text-rose-700",
+            },
+          ].map((s) => (
+            <div key={s.label} className="rounded-xl bg-white p-5">
+              <div
+                className={`mb-3 inline-flex rounded-lg p-2 ${s.color}`}
+              >
+                <s.icon size={18} />
+              </div>
+              <p className="text-sm text-slate-500">{s.label}</p>
+              <p className="mt-1 text-2xl font-semibold">{s.value}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="fitur" className="mx-auto max-w-5xl px-6 py-24">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
+            Semua yang dibutuhkan, tanpa ribet
+          </h2>
+          <p className="mx-auto mt-3 max-w-md text-sm text-slate-500">
+            Fitur dirancang sesuai kebutuhan pendataan dan monitoring UMKM
+            di lapangan.
+          </p>
+        </div>
+        <div className="mt-14 grid gap-5 md:grid-cols-3">
+          {[
+            {
+              icon: ClipboardCheck,
+              title: "Monitoring Berkala",
+              desc: "Catat perkembangan omzet, tenaga kerja, legalitas, dan digitalisasi UMKM dari waktu ke waktu.",
+            },
+            {
+              icon: TrendingUp,
+              title: "Perbandingan Otomatis",
+              desc: "Lihat perubahan dari baseline ke kondisi terbaru — pertumbuhan dan penurunan terdeteksi otomatis.",
+            },
+            {
+              icon: Shield,
+              title: "Legalitas & Digital",
+              desc: "Pantau status NIB, Halal, PIRT, HAKI, serta kehadiran di WhatsApp, Instagram, Facebook, dan TikTok.",
+            },
+            {
+              icon: Building2,
+              title: "Per Kecamatan",
+              desc: "Data terstruktur per kecamatan dengan akses terbatas sesuai peran pengguna.",
+            },
+            {
+              icon: Smartphone,
+              title: "Digitalisasi UMKM",
+              desc: "Tandai kanal digital yang digunakan dan lacak perkembangan kehadiran online.",
+            },
+            {
+              icon: ArrowRight,
+              title: "Tindak Lanjut",
+              desc: "Dokumentasi kebutuhan utama, kendala, dan langkah tindak lanjut untuk setiap UMKM.",
+            },
+          ].map((f) => (
+            <div key={f.title} className="rounded-xl bg-white p-6">
+              <div className="mb-4 inline-flex rounded-lg bg-[#176b57]/10 p-2.5 text-[#176b57]">
+                <f.icon size={20} />
+              </div>
+              <h3 className="font-semibold">{f.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-500">
+                {f.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {coverage > 0 && (
+        <section className="mx-auto max-w-5xl px-6 pb-24">
+          <div className="overflow-hidden rounded-2xl bg-[#103b33] p-10 text-center text-white md:p-16">
+            <p className="text-sm font-medium text-lime-200">Cakupan monitoring</p>
+            <p className="mt-3 text-5xl font-semibold md:text-7xl">
+              {coverage}%
+            </p>
+            <p className="mt-3 text-sm text-emerald-100/60">
+              UMKM sudah terpantau dari {totalUmkm} total data
+            </p>
+            <Link
+              href="/login"
+              className="mt-8 inline-flex items-center gap-2 rounded-md bg-white px-6 py-3 text-sm font-medium text-[#103b33]"
+            >
+              Lihat Dashboard
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+        </section>
+      )}
+
+      <footer className="border-t border-slate-200 bg-white py-8">
+        <div className="mx-auto max-w-5xl px-6 text-center text-xs text-slate-400">
+          <p>SIGAPUMKM — Sistem Informasi Pendataan & Monitoring UMKM</p>
+          <p className="mt-1">
+            Kecamatan Tenggarong Seberang & Anggana, Kutai Kartanegara
+          </p>
+        </div>
+      </footer>
     </main>
   );
 }
