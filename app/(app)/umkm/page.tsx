@@ -47,7 +47,7 @@ export default async function UmkmPage({
           + Tambah Data
         </Link>
       </div>
-      <form className="mt-7 grid gap-3 rounded-lg border border-slate-200 bg-white p-4 md:grid-cols-[1fr_200px_auto]">
+      <form className="mt-7 grid gap-3 rounded-lg bg-white p-4 md:grid-cols-[1fr_200px_auto]">
         <input
           name="q"
           defaultValue={p.q}
@@ -68,7 +68,7 @@ export default async function UmkmPage({
           Terapkan
         </button>
       </form>
-      <div className="mt-5 overflow-x-auto rounded-lg border border-slate-200 bg-white">
+      <div className="mt-5 overflow-x-auto rounded-lg bg-white">
         <table className="w-full min-w-[920px] text-left text-sm">
           <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
             <tr>

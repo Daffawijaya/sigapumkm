@@ -92,7 +92,7 @@ export default function Home() {
             {stats.map((stat) => (
               <article
                 key={stat.label}
-                className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm"
+                className="rounded-lg bg-white p-5"
               >
                 <div className={`mb-4 h-1 w-9 rounded-full ${stat.color}`} />
                 <p className="text-sm text-slate-500">{stat.label}</p>
@@ -105,7 +105,7 @@ export default function Home() {
           </div>
 
           <div className="mt-5 grid gap-5 xl:grid-cols-[minmax(0,1.7fr)_minmax(280px,.7fr)]">
-            <article className="rounded-lg border border-slate-200 bg-white p-5">
+            <article className="rounded-lg bg-white p-5">
               <div className="flex items-start justify-between">
                 <div>
                   <h2 className="font-semibold">Tren omzet UMKM</h2>
@@ -128,7 +128,7 @@ export default function Home() {
                 </div>
               </div>
             </article>
-            <article className="rounded-lg border border-slate-200 bg-[#173f37] p-5 text-white">
+            <article className="rounded-lg bg-[#173f37] p-5 text-white">
               <p className="text-sm font-medium text-emerald-100">
                 Cakupan monitoring
               </p>
@@ -145,7 +145,7 @@ export default function Home() {
             </article>
           </div>
 
-          <article className="mt-5 overflow-hidden rounded-lg border border-slate-200 bg-white">
+          <article className="mt-5 overflow-hidden rounded-lg bg-white">
             <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
               <div>
                 <h2 className="font-semibold">UMKM perlu perhatian</h2>

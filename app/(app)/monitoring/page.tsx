@@ -93,7 +93,7 @@ export default async function MonitoringPage({
           {count} UMKM
         </span>
       </div>
-      <form className="mt-7 flex gap-3 rounded-lg border border-slate-200 bg-white p-4">
+      <form className="mt-7 flex gap-3 rounded-lg bg-white p-4">
         <input
           name="q"
           defaultValue={params.q}
@@ -112,7 +112,7 @@ export default async function MonitoringPage({
           </Link>
         )}
       </form>
-      <div className="mt-5 rounded-lg border border-slate-200 bg-white">
+      <div className="mt-5 rounded-lg bg-white">
         <table className="w-full text-left text-sm">
           <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
             <tr>

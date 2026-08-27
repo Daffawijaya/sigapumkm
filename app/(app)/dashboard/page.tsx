@@ -57,7 +57,7 @@ export default async function DashboardPage() {
         {cards.map((c) => (
           <article
             key={c.label}
-            className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm"
+            className="rounded-lg bg-white p-5"
           >
             <p className="text-sm text-slate-500">{c.label}</p>
             <p className="mt-2 text-2xl font-semibold">{c.value}</p>

@@ -61,7 +61,7 @@ export function UmkmForm({
           {state.error}
         </div>
       )}
-      <section className="rounded-lg border border-slate-200 bg-white p-5 md:p-7">
+      <section className="rounded-lg bg-white p-5 md:p-7">
         <div className="mb-6">
           <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
             Bagian 1
@@ -158,7 +158,7 @@ export function UmkmForm({
           </label>
         </div>
       </section>
-      <section className="rounded-lg border border-slate-200 bg-white p-5 md:p-7">
+      <section className="rounded-lg bg-white p-5 md:p-7">
         <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
           Bagian 2
         </p>
@@ -248,7 +248,7 @@ export function UmkmForm({
           />
         </div>
       </section>
-      <section className="rounded-lg border border-slate-200 bg-white p-5 md:p-7">
+      <section className="rounded-lg bg-white p-5 md:p-7">
         <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
           Bagian 3
         </p>
@@ -272,7 +272,7 @@ export function UmkmForm({
           <ToggleField name="memiliki_tiktok" detail="tiktok" label="TikTok" />
         </div>
       </section>
-      <section className="rounded-lg border border-slate-200 bg-white p-5 md:p-7">
+      <section className="rounded-lg bg-white p-5 md:p-7">
         <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
           Bagian 4
         </p>

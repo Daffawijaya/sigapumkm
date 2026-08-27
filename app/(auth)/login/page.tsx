@@ -30,7 +30,7 @@ export default function LoginPage() {
         </p>
       </section>
       <section className="flex items-center justify-center p-6">
-        <div className="w-full max-w-md rounded-lg border border-slate-200 bg-white p-7 shadow-sm md:p-10">
+        <div className="w-full max-w-md rounded-lg bg-white p-7 md:p-10">
           <p className="text-sm font-medium text-emerald-700">Selamat datang</p>
           <h2 className="mt-2 text-2xl font-semibold tracking-tight">
             Masuk ke akun Anda

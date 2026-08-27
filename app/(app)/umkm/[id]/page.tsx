@@ -104,7 +104,7 @@ export default async function DetailUmkmPage({
         ].map((x) => (
           <article
             key={x.l}
-            className="rounded-lg border border-slate-200 bg-white p-5"
+            className="rounded-lg bg-white p-5"
           >
             <p className="text-sm text-slate-500">{x.l}</p>
             <p className="mt-2 text-xl font-semibold">{x.v}</p>
@@ -114,7 +114,7 @@ export default async function DetailUmkmPage({
       </div>
       <SnapshotComparison baseline={baselineSnapshot} latest={latestSnapshot} previous={previousSnapshot} />
       <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_.8fr]">
-        <section className="rounded-lg border border-slate-200 bg-white p-6">
+        <section className="rounded-lg bg-white p-6">
           <h2 className="font-semibold">Data usaha & peserta</h2>
           <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-2">
             {[
@@ -140,7 +140,7 @@ export default async function DetailUmkmPage({
             ))}
           </div>
         </section>
-        <section className="rounded-lg border border-slate-200 bg-white p-6">
+        <section className="rounded-lg bg-white p-6">
           <h2 className="font-semibold">Timeline perkembangan</h2>
           <div className="mt-5 border-l-2 border-slate-200 pl-5">
             <div className="relative pb-7">

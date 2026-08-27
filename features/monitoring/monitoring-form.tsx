@@ -31,7 +31,7 @@ export function MonitoringForm({
           {state.error}
         </p>
       )}
-      <section className="rounded-lg border bg-white p-6">
+      <section className="rounded-lg bg-white p-6">
         <h2 className="font-semibold">1. Perkembangan usaha</h2>
         <div className="mt-5 grid gap-5 md:grid-cols-3">
           <label className="text-sm font-medium">
@@ -68,7 +68,7 @@ export function MonitoringForm({
           </label>
         </div>
       </section>
-      <section className="rounded-lg border bg-white p-6">
+      <section className="rounded-lg bg-white p-6">
         <h2 className="font-semibold">2–3. Legalitas & digitalisasi</h2>
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           {toggles.map(([name, label]) => (
@@ -104,7 +104,7 @@ export function MonitoringForm({
           />
         ))}
       </section>
-      <section className="rounded-lg border bg-white p-6">
+      <section className="rounded-lg bg-white p-6">
         <h2 className="font-semibold">4. Kondisi & tindak lanjut</h2>
         <div className="mt-5 grid gap-4 md:grid-cols-2">
           {[

@@ -32,7 +32,7 @@ export function DashboardCharts({
   ];
   return (
     <div className="grid gap-5 xl:grid-cols-[1.4fr_.8fr]">
-      <article className="rounded-lg border border-slate-200 bg-white p-5">
+      <article className="rounded-lg bg-white p-5">
         <h2 className="font-semibold">Tren pendataan UMKM</h2>
         <p className="mt-1 text-xs text-slate-500">
           Akumulasi berdasarkan bulan
@@ -60,7 +60,7 @@ export function DashboardCharts({
           </ResponsiveContainer>
         </div>
       </article>
-      <article className="rounded-lg border border-slate-200 bg-white p-5">
+      <article className="rounded-lg bg-white p-5">
         <h2 className="font-semibold">Kategori usaha</h2>
         <p className="mt-1 text-xs text-slate-500">Komposisi kondisi terkini</p>
         <div className="mt-3 h-48">
@@ -97,7 +97,7 @@ export function DashboardCharts({
           ))}
         </div>
       </article>
-      <article className="rounded-lg border border-slate-200 bg-white p-5 xl:col-span-2">
+      <article className="rounded-lg bg-white p-5 xl:col-span-2">
         <h2 className="font-semibold">Distribusi kecamatan</h2>
         <div className="mt-5 h-52">
           <ResponsiveContainer>
